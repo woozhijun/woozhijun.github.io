@@ -3,6 +3,10 @@
 *.log
 *.iml
 node_modules/
+themes/next
 
 .github/
 .git/
+
+package.json
+package-lock.json
