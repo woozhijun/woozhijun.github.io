@@ -3,7 +3,7 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 智军WOO
+title: zhijunwoo
 subtitle: 技术分享、洞悉数据、同创价值
 description: 技术分享，洞悉数据，高效监控，分布式计算，架构优化，共创价值
 author: zhijunwoo
@@ -63,7 +63,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: next 
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
