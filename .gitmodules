@@ -1,0 +1,8 @@
+[submodule "themes/next"]
+	path = themes/next
+	url = https://github.com/woozhijun/hexo-theme-next.git
+	branch = release-v7.5.0
+[submodule "themes/vexo"]
+	path = themes/vexo
+	url = https://github.com/woozhijun/hexo-theme-vexo.git
+	branch = upgrading
