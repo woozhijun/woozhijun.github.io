@@ -1,8 +1,16 @@
 [submodule "themes/next"]
 	path = themes/next
 	url = https://github.com/woozhijun/hexo-theme-next.git
-	branch = release-v7.5.0
-[submodule "themes/vexo"]
-	path = themes/vexo
-	url = https://github.com/woozhijun/hexo-theme-vexo.git
-	branch = upgrading
+	branch = release-v7.8.0
+[submodule "themes/matery"]
+	path = themes/matery
+	url = https://github.com/blinkfox/hexo-theme-matery.git
+	tag = v2.0.0
+[submodule "themes/butterfly"]
+	path = themes/butterfly
+	url = https://github.com/jerryc127/hexo-theme-butterfly.git
+	tag = 3.3.0
+[submodule "themes/fluid"]
+	path = themes/fluid
+	url = https://github.com/fluid-dev/hexo-theme-fluid.git
+	tag = v1.8.6
