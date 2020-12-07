@@ -1,281 +1,204 @@
-<!DOCTYPE html>
-<html lang="zh-Hans">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
-
-
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Muse',
-    version: '7.5.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: 'Copy',
-      copy_success: 'Copied',
-      copy_failure: 'Copy failed'
-    },
-    sidebarPadding: 40
-  };
-</script>
-
-  <meta name="description" content="摘要 本次主要介绍关键的Kafka性能指标，Kafka metrics不同收集方式及数据上报的实现，最后确保达到有效监控Kafka工作状态的目的.  Kafka metricsKafka使用Yammer Metrics来上报服务端和客户端的Metric信息，通过配置采集相应数据上报监控系统，展示可视化结果。Yammer Metrics提供6种形式的Metrics收集 —— Gauges，Count">
-<meta name="keywords" content="大数据 kafka">
+<!DOCTYPE html><html lang="zh-Hans" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>洞悉 Kafka metrics | zhijunwoo</title><meta name="keywords" content="大数据 kafka"><meta name="author" content="zhijunwoo"><meta name="copyright" content="zhijunwoo"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="摘要 本次主要介绍关键的Kafka性能指标，Kafka metrics不同收集方式及数据上报的实现，最后确保达到有效监控Kafka工作状态的目的.  Kafka metricsKafka使用Yammer Metrics来上报服务端和客户端的Metric信息，通过配置采集相应数据上报监控系统，展示可视化结果。Yammer Metrics提供6种形式的Metrics收集 —— Gauges，Count">
 <meta property="og:type" content="article">
 <meta property="og:title" content="洞悉 Kafka metrics">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;06&#x2F;02&#x2F;kafka_metrics&#x2F;index.html">
+<meta property="og:url" content="http://yoursite.com/2019/06/02/kafka_metrics/index.html">
 <meta property="og:site_name" content="zhijunwoo">
 <meta property="og:description" content="摘要 本次主要介绍关键的Kafka性能指标，Kafka metrics不同收集方式及数据上报的实现，最后确保达到有效监控Kafka工作状态的目的.  Kafka metricsKafka使用Yammer Metrics来上报服务端和客户端的Metric信息，通过配置采集相应数据上报监控系统，展示可视化结果。Yammer Metrics提供6种形式的Metrics收集 —— Gauges，Count">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-02T15:12:10.555Z">
+<meta property="og:locale">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2019-06-02T15:12:10.555Z">
+<meta property="article:modified_time" content="2019-06-02T15:12:10.555Z">
+<meta property="article:author" content="zhijunwoo">
+<meta property="article:tag" content="大数据 kafka">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://yoursite.com/2019/06/02/kafka_metrics/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+};
 
-<link rel="canonical" href="http://yoursite.com/2019/06/02/kafka_metrics/">
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
 
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
 
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true,
-    isPage: false,
-    isArchive: false
-  };
-</script>
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
 
-  <title>洞悉 Kafka metrics | zhijunwoo</title>
-  
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2019-06-02 23:12:10'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
   }
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">zhijunwoo</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-        <p class="site-subtitle">技术分享、洞悉数据、同创价值</p>
-  </div>
-
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
-
-  </li>
-  </ul>
-
-</nav>
-</div>
-    </header>
-
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content">
-            
-
-  <div class="posts-expand">
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/02/kafka_metrics/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="zhijunwoo">
-      <meta itemprop="description" content="技术分享，洞悉数据，高效监控，分布式计算，架构优化，共创价值">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="zhijunwoo">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          洞悉 Kafka metrics
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-06-02 23:12:10" itemprop="dateCreated datePublished" datetime="2019-06-02T23:12:10+08:00">2019-06-02</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/kafka/" itemprop="url" rel="index">
-                    <span itemprop="name">kafka</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><blockquote>
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">1</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div></div></div><hr/></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">zhijunwoo</a></span><span id="menus"><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">洞悉 Kafka metrics</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2019-06-02T15:12:10.555Z" title="Created 2019-06-02 23:12:10">2019-06-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2019-06-02T15:12:10.555Z" title="Updated 2019-06-02 23:12:10">2019-06-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/kafka/">kafka</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><blockquote>
 <p>本次主要介绍关键的Kafka性能指标，Kafka metrics不同收集方式及数据上报的实现，最后确保达到有效监控Kafka工作状态的目的.</p>
 </blockquote>
 <h2 id="Kafka-metrics"><a href="#Kafka-metrics" class="headerlink" title="Kafka metrics"></a>Kafka metrics</h2><p>Kafka使用Yammer Metrics来上报服务端和客户端的Metric信息，通过配置采集相应数据上报监控系统，展示可视化结果。<br>Yammer Metrics提供6种形式的Metrics收集 —— Gauges，Counters，Histograms，Timers，Health Checks，Metrics Annotation。<br>Yammer Metrics将Metrics收集与上报分离，可以根据需要自由组合。目前支持的Reporter有Console Reporter，JMX Reporter，CSV Reporter，SLF4J Reporter，HTTP Reporter，Ganglia Reporter，Graphite Reporter。<br>因此，Kafka将可以通过以上组合输出我们想要的Metrics数据。</p>
-<h3 id="metrics收集"><a href="#metrics收集" class="headerlink" title="metrics收集"></a>metrics收集</h3><h4 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">final MetricRegistry metrics = new MetricRegistry();</span><br></pre></td></tr></table></figure>
+<h3 id="metrics收集"><a href="#metrics收集" class="headerlink" title="metrics收集"></a>metrics收集</h3><h4 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">final MetricRegistry metrics &#x3D; new MetricRegistry();</span><br></pre></td></tr></table></figure>
 
 <h4 id="Gauges"><a href="#Gauges" class="headerlink" title="Gauges"></a>Gauges</h4><p>gauge是一个数值的瞬时测量。比如我们可能需要衡量队列中待处理作业的数量：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class QueueManager &#123;</span><br><span class="line">    private final Queue queue;</span><br><span class="line">    public QueueManager(MetricRegistry metrics, String name) &#123;</span><br><span class="line">        this.queue = new Queue();</span><br><span class="line">        // name(QueueManager.class, name, &quot;size&quot;) 中间按.分隔</span><br><span class="line">        metrics.register(MetricRegistry.name(QueueManager.class, name, &quot;size&quot;),</span><br><span class="line">                         new Gauge&lt;Integer&gt;() &#123;</span><br><span class="line">                             @Override</span><br><span class="line">                             public Integer getValue() &#123;</span><br><span class="line">                                 return queue.size();</span><br><span class="line">                             &#125;</span><br><span class="line">                         &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class QueueManager &#123;</span><br><span class="line">    private final Queue queue;</span><br><span class="line">    public QueueManager(MetricRegistry metrics, String name) &#123;</span><br><span class="line">        this.queue &#x3D; new Queue();</span><br><span class="line">        &#x2F;&#x2F; name(QueueManager.class, name, &quot;size&quot;) 中间按.分隔</span><br><span class="line">        metrics.register(MetricRegistry.name(QueueManager.class, name, &quot;size&quot;),</span><br><span class="line">                         new Gauge&lt;Integer&gt;() &#123;</span><br><span class="line">                             @Override</span><br><span class="line">                             public Integer getValue() &#123;</span><br><span class="line">                                 return queue.size();</span><br><span class="line">                             &#125;</span><br><span class="line">                         &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h4 id="Counters"><a href="#Counters" class="headerlink" title="Counters"></a>Counters</h4><p>counter是AtomicLong类型的gauge，你可以增加或减少其值。比如我们可能需要更有效的统计阻塞在队列里job的数量：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">private final Counter pendingJobs = metrics.counter(name(QueueManager.class, &quot;pending-jobs&quot;));</span><br><span class="line">public void addJob(Job job) &#123;</span><br><span class="line">    // 自增</span><br><span class="line">    pendingJobs.inc();</span><br><span class="line">    queue.offer(job);</span><br><span class="line">&#125;</span><br><span class="line">public Job takeJob() &#123;</span><br><span class="line">    pendingJobs.dec();</span><br><span class="line">    return queue.take();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MetricRegistry.name(QueueManager.class, &quot;jobs&quot;, &quot;size&quot;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">private final Counter pendingJobs &#x3D; metrics.counter(name(QueueManager.class, &quot;pending-jobs&quot;));</span><br><span class="line">public void addJob(Job job) &#123;</span><br><span class="line">    &#x2F;&#x2F; 自增</span><br><span class="line">    pendingJobs.inc();</span><br><span class="line">    queue.offer(job);</span><br><span class="line">&#125;</span><br><span class="line">public Job takeJob() &#123;</span><br><span class="line">    pendingJobs.dec();</span><br><span class="line">    return queue.take();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MetricRegistry.name(QueueManager.class, &quot;jobs&quot;, &quot;size&quot;)</span><br></pre></td></tr></table></figure>
 
 <h4 id="Histograms"><a href="#Histograms" class="headerlink" title="Histograms"></a>Histograms</h4><p>histogram统计数据的分布，比如min,max,mean,stddev,median,P75,P90,P95,P98,P99,P99.9等的值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">private final Histogram responseSizes = metrics.histogram(name(RequestHandler.class, &quot;response-sizes&quot;));</span><br><span class="line"></span><br><span class="line">public void handleRequest(Request request, Response response) &#123;</span><br><span class="line">    // 增加上报的值</span><br><span class="line">    responseSizes.update(response.getContent().length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">private final Histogram responseSizes &#x3D; metrics.histogram(name(RequestHandler.class, &quot;response-sizes&quot;));</span><br><span class="line"></span><br><span class="line">public void handleRequest(Request request, Response response) &#123;</span><br><span class="line">    &#x2F;&#x2F; 增加上报的值</span><br><span class="line">    responseSizes.update(response.getContent().length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h4 id="Timers"><a href="#Timers" class="headerlink" title="Timers"></a>Timers</h4><p>Timer统计一个特定的代码片段被调用的速率和其持续时间的分布，比如统计response的耗时：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">private final Timer responses = metrics.timer(name(RequestHandler.class, &quot;responses&quot;));</span><br><span class="line"></span><br><span class="line">public String handleRequest(Request request, Response response) &#123;</span><br><span class="line">    final Timer.Context context = responses.time();</span><br><span class="line">    try &#123;</span><br><span class="line">        // 具体执行逻辑</span><br><span class="line">        return &quot;OK&quot;;</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        context.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">private final Timer responses &#x3D; metrics.timer(name(RequestHandler.class, &quot;responses&quot;));</span><br><span class="line"></span><br><span class="line">public String handleRequest(Request request, Response response) &#123;</span><br><span class="line">    final Timer.Context context &#x3D; responses.time();</span><br><span class="line">    try &#123;</span><br><span class="line">        &#x2F;&#x2F; 具体执行逻辑</span><br><span class="line">        return &quot;OK&quot;;</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        context.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h4 id="Health-Checks"><a href="#Health-Checks" class="headerlink" title="Health Checks"></a>Health Checks</h4><p>主要用户可以自己判断系统的健康状态，比如判断数据库是否连接正常：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">final HealthCheckRegistry healthChecks = new HealthCheckRegistry();</span><br><span class="line"></span><br><span class="line">public class DatabaseHealthCheck extends HealthCheck &#123;</span><br><span class="line">    private final Database database;</span><br><span class="line"></span><br><span class="line">    public DatabaseHealthCheck(Database database) &#123;</span><br><span class="line">        this.database = database;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public HealthCheck.Result check() throws Exception &#123;</span><br><span class="line">        if (database.isConnected()) &#123;</span><br><span class="line">            return HealthCheck.Result.healthy();</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            return HealthCheck.Result.unhealthy(&quot;Cannot connect to &quot; + database.getUrl());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">healthChecks.register(&quot;postgres&quot;, new DatabaseHealthCheck(database));</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">final HealthCheckRegistry healthChecks &#x3D; new HealthCheckRegistry();</span><br><span class="line"></span><br><span class="line">public class DatabaseHealthCheck extends HealthCheck &#123;</span><br><span class="line">    private final Database database;</span><br><span class="line"></span><br><span class="line">    public DatabaseHealthCheck(Database database) &#123;</span><br><span class="line">        this.database &#x3D; database;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public HealthCheck.Result check() throws Exception &#123;</span><br><span class="line">        if (database.isConnected()) &#123;</span><br><span class="line">            return HealthCheck.Result.healthy();</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            return HealthCheck.Result.unhealthy(&quot;Cannot connect to &quot; + database.getUrl());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">healthChecks.register(&quot;postgres&quot;, new DatabaseHealthCheck(database));</span><br></pre></td></tr></table></figure>
 
 <h4 id="Metrics-Annotation"><a href="#Metrics-Annotation" class="headerlink" title="Metrics Annotation"></a>Metrics Annotation</h4><p>注解方式，简单的实现统计某个方法、某个值的数据：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* 统计调用的次数和时间</span><br><span class="line">*/</span><br><span class="line">@Timed</span><br><span class="line">public void call() &#123;</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">/**</span><br><span class="line">* 统计登陆的次数</span><br><span class="line">*/</span><br><span class="line">@Counted</span><br><span class="line">public void userLogin()&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//other</span><br><span class="line">@CachedGauge @Gauge @ExceptionMetered @Metered @Metric</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">### metrics上报</span><br><span class="line">#### ConsoleReporter</span><br><span class="line">对于简单指标的计算，可以使用定期向控制台报告：</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line">* 统计调用的次数和时间</span><br><span class="line">*&#x2F;</span><br><span class="line">@Timed</span><br><span class="line">public void call() &#123;</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">&#x2F;**</span><br><span class="line">* 统计登陆的次数</span><br><span class="line">*&#x2F;</span><br><span class="line">@Counted</span><br><span class="line">public void userLogin()&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;other</span><br><span class="line">@CachedGauge @Gauge @ExceptionMetered @Metered @Metric</span><br><span class="line">&#96;&#96;&#96; </span><br><span class="line"></span><br><span class="line">### metrics上报</span><br><span class="line">#### ConsoleReporter</span><br><span class="line">对于简单指标的计算，可以使用定期向控制台报告：</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>final ConsoleReporter reporter = ConsoleReporter.forRegistry(metrics)<br>                                    .convertRatesTo(TimeUnit.SECONDS)<br>                                    .convertDurationsTo(TimeUnit.MILLISECONDS).build();<br>metrics.register(“jvm.mem”, new MemoryUsageGaugeSet());<br>metrics.register(“jvm.gc”, new GarbageCollectorMetricSet());</p>
 <p>reporter.start(5, TimeUnit.MINUTES);</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### JmxReporter</span><br><span class="line">使用Jmx上报数据，转化为MBean，注：不建议在生产环境中使用，JMX的RPC API是不可靠的，但为了开发和浏览可选可视化工具：</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### JmxReporter</span><br><span class="line">使用Jmx上报数据，转化为MBean，注：不建议在生产环境中使用，JMX的RPC API是不可靠的，但为了开发和浏览可选可视化工具：</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>final JmxReporter reporter = JmxReporter.forRegistry(registry).build();<br>reporter.start();</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### CsvReporter</span><br><span class="line">对于相对复杂的指标，可将同一个metric创建.csv文件，并将定期上报的数据按新行写入：</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### CsvReporter</span><br><span class="line">对于相对复杂的指标，可将同一个metric创建.csv文件，并将定期上报的数据按新行写入：</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>final CsvReporter reporter = CsvReporter.forRegistry(registry)<br>                                        .formatFor(Locale.US)<br>                                        .convertRatesTo(TimeUnit.SECONDS)<br>                                        .convertDurationsTo(TimeUnit.MILLISECONDS)<br>                                        .build(new File(“~/projects/data/“));<br>reporter.start(1, TimeUnit.SECONDS);</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### Slf4jReporter</span><br><span class="line">可以将上报数据记录slf4j日志：</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### Slf4jReporter</span><br><span class="line">可以将上报数据记录slf4j日志：</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>final Slf4jReporter reporter = Slf4jReporter.forRegistry(registry)<br>                                            .outputTo(LoggerFactory.getLogger(“com.example.metrics”))<br>                                            .convertRatesTo(TimeUnit.SECONDS)<br>                                            .convertDurationsTo(TimeUnit.MILLISECONDS)<br>                                            .build();<br>reporter.start(1, TimeUnit.MINUTES);</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### HTTP Reporter</span><br><span class="line">需搭建web服务，新增Listener事件，完成相应metrics指标注册，目前支持HealthCheckServlet，ThreadDumpServlet，MetricsServlet，PingServlet四类，最后启动服务即可请求获取Json格式的监控数据。实现详情如下：</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### HTTP Reporter</span><br><span class="line">需搭建web服务，新增Listener事件，完成相应metrics指标注册，目前支持HealthCheckServlet，ThreadDumpServlet，MetricsServlet，PingServlet四类，最后启动服务即可请求获取Json格式的监控数据。实现详情如下：</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>public class MyMetricsServletListener extends MetricsServlet.ContextListener {</p>
 <pre><code>public static final MetricRegistry metrics = new MetricRegistry();
 
 @Override
-protected MetricRegistry getMetricRegistry() {
+protected MetricRegistry getMetricRegistry() &#123;
 
     metrics.register(&quot;jvm.mem&quot;, new MemoryUsageGaugeSet());
     metrics.register(&quot;jvm.gc&quot;, new GarbageCollectorMetricSet());
     System.out.println(&quot;&gt;&gt;.Listener success...&quot;);
     return metrics;
-}</code></pre><p>}</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+&#125;</code></pre>
+<p>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
 <p>public class MyHealthCheckServletListener extends HealthCheckServlet.ContextListener {</p>
 <pre><code>public static final HealthCheckRegistry healthCheck = new HealthCheckRegistry();
 @Override
-protected HealthCheckRegistry getHealthCheckRegistry() {
+protected HealthCheckRegistry getHealthCheckRegistry() &#123;
 
     healthCheck.register(&quot;postgres&quot;, new TFHealthCheck(false));
     return healthCheck;
-}</code></pre><p>}</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+&#125;</code></pre>
+<p>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
 <pre><code>&lt;listener&gt;
     &lt;listener-class&gt;com.immomo.hubble.kafka.servlet.MyMetricsServletListener&lt;/listener-class&gt;
 &lt;/listener&gt;
@@ -290,9 +213,10 @@ protected HealthCheckRegistry getHealthCheckRegistry() {
 &lt;servlet-mapping&gt;
    &lt;servlet-name&gt;metrics&lt;/servlet-name&gt;
    &lt;url-pattern&gt;/metrics/*&lt;/url-pattern&gt;
-&lt;/servlet-mapping&gt;</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[源码地址](https://github.com/dropwizard/metrics)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### Kafka性能指标</span><br><span class="line">#### kafka.server</span><br><span class="line">BrokerTopicMetrics,name=MessagesInPerSec: 每秒消息量</span><br><span class="line">BrokerTopicMetrics,name=BytesInPerSec: 每秒输入字节数</span><br><span class="line">BrokerTopicMetrics,name=BytesOutPerSec: 每秒输出字节数</span><br><span class="line">ReplicaManager,name=UnderReplicatedPartitions: 复制分区的数量，默认0，|ISR|&lt;|all replicas|</span><br><span class="line">ReplicaManager,name=PartitionCount: 分区数</span><br><span class="line">ReplicaManager,name=LeaderCount: Leader副本数</span><br><span class="line">ReplicaManager,name=IsrShrinksPerSec: ISR回退</span><br><span class="line">ReplicaManager,name=IsrExpandsPerSec: ISR超前 value is 0</span><br><span class="line">ReplicaFetcherManager,name=MaxLag,clientId=Replica: 滞后follower和leader的最大消息长度</span><br><span class="line">FetcherLagMetrics,name=ConsumerLag,clientId=([-.\w]+),topic=([-.\w]+),partition=([0-9]+): 滞后follower的消息长度</span><br><span class="line">DelayedOperationPurgatory,name=PurgatorySize,delayedOperation=Produce: producer等待请求大小</span><br><span class="line">DelayedOperationPurgatory,name=PurgatorySize,delayedOperation=Fetch: 获取等待请求大小</span><br><span class="line">KafkaRequestHandlerPool,name=RequestHandlerAvgIdlePercent: 平均处理线程空闲时间</span><br><span class="line"></span><br><span class="line">#### kafka.network</span><br><span class="line">kafka.network:type=RequestMetrics,name=$1,request=&#123;Produce|FetchConsumer|FetchFollower&#125;</span><br><span class="line">RequestsPerSec: 每秒请求量</span><br><span class="line">TotalTimeMs: 请求总时间</span><br><span class="line">RequestQueueTimeMs: 请求队列等待时间</span><br><span class="line">LocalTimeMs: 请求leader处理时间</span><br><span class="line">RemoteTimeMs: 请求follower等待时间</span><br><span class="line">ResponseQueueTimeMs: 请求队列等待响应时间</span><br><span class="line">ResponseSendTimeMs: 请求响应发送时间</span><br><span class="line">kafka.network:type=SocketServer,name=NetworkProcessorAvgIdlePercent: 平均网络处理空闲时间</span><br><span class="line">    </span><br><span class="line">#### kafka.controller</span><br><span class="line">KafkaController,name=ActiveControllerCount: 活跃broker数量</span><br><span class="line">ControllerStats,name=LeaderElectionRateAndTimeMs: leader选举率</span><br><span class="line">ControllerStats,name=UncleanLeaderElectionsPerSec: Unclean leader选举率</span><br><span class="line"></span><br><span class="line">#### common</span><br><span class="line">connection-close-rate: 每秒连接关闭率</span><br><span class="line">connection-creation-rate: 每秒新建连接率</span><br><span class="line">network-io-rate: 平均每秒IO次数（读取或写入）</span><br><span class="line">outgoing-byte-rat: 平均每秒向服务器发送的字节数</span><br><span class="line">request-rate: 平均每秒发送的请求数</span><br><span class="line">incoming-byte-rate: 每秒读取字节数</span><br><span class="line">response-rate: 每秒收到的回复</span><br><span class="line">select-rate: IO切换次数</span><br><span class="line">io-wait-ratio: IO线程等待时间</span><br><span class="line">connection-count: 当前活跃连接数</span><br><span class="line">    </span><br><span class="line">#### broker</span><br><span class="line">outgoing-byte-rate: 平均每秒发送字节数</span><br><span class="line">request-rate: 平均每秒请求数</span><br><span class="line">request-size-avg: 所有请求的平均大小</span><br><span class="line">request-latency-avg: 平均请求时间(ms)</span><br><span class="line">response-rate: 每秒收到的响应数</span><br><span class="line">    </span><br><span class="line">#### producer</span><br><span class="line">waiting-threads: 缓存区排队的用户阻塞线程数</span><br><span class="line">buffer-available-bytes: 可用内存字节数</span><br><span class="line">batch-size-avg: 每个分区每次请求发送的平均字节数</span><br><span class="line">compression-rate-avg: 批量记录平均压缩率</span><br><span class="line">record-queue-time-avg: 批量记录耗费的平均时间（ms）</span><br><span class="line">request-latency-avg: 平均请求时间（ms）</span><br><span class="line">record-send-rate: 每秒发送的平均次数</span><br><span class="line">record-retry-rate: 每秒重试发送次数</span><br><span class="line">record-error-rate: 每秒错误数量次数</span><br><span class="line">requests-in-flight: 目前等待响应的请求数量</span><br><span class="line">metadata-age: 当前生产者数据使用周期（s）</span><br><span class="line">    </span><br><span class="line">#### consumer</span><br><span class="line">##### Consumer Group</span><br><span class="line">commit-latency-avg: 提交请求所用的平均时间</span><br><span class="line">commit-rate: 每秒提交调用次数</span><br><span class="line">assigned-partitions: 当前分配给该消费者的分区数（可选）</span><br><span class="line">heartbeat-rate: 平均每秒心跳数</span><br><span class="line">join-time-avg: 群组重新加入的平均时间</span><br><span class="line">join-rate: 每秒连接组的数量</span><br><span class="line">sync-time-avg: 群组同步所需的平均时间</span><br><span class="line">sync-rate: 每秒同步的组数</span><br><span class="line">    </span><br><span class="line">##### consumer fetch</span><br><span class="line">fetch-size-avg: 每次请求获取的平均字节数</span><br><span class="line">bytes-consumed-rate: 每秒消耗的平均字节数</span><br><span class="line">fetch-latency-avg: 请求所用的平均时间</span><br><span class="line">fetch-rate: 每秒提取请求数</span><br><span class="line">records-lag-max: 分区中记录的最大滞后数量</span><br><span class="line">    </span><br><span class="line">##### topic-level fetch</span><br><span class="line">fetch-size-avg: topic请求的平均字节数</span><br><span class="line">bytes-consumed-rate: topic每秒平均消耗的字节数</span><br><span class="line"></span><br><span class="line">#### streams</span><br><span class="line">##### Thread</span><br><span class="line">[commit|poll|process|punctuate]-latency-avg: 平均执行时间（ms）</span><br><span class="line">[commit|poll|process|punctuate]-rate: 平均每秒请求数</span><br><span class="line">task-created-rate: 每秒新建任务数</span><br><span class="line">task-closed-rate: 每秒关闭任务数</span><br><span class="line">skipped-records-rate: 每秒跳过记录数</span><br><span class="line">    </span><br><span class="line">##### Task</span><br><span class="line">commit-latency-avg: 平均执行时间（ms）</span><br><span class="line">commit-rate: 每秒提交的平均次数</span><br><span class="line"></span><br><span class="line">##### Processor Node</span><br><span class="line">forward-rate: 每秒从源节点向下游转发的平均速率</span><br><span class="line"></span><br><span class="line">##### State Store </span><br><span class="line">[put|put-if-absent|get|delete|put-all|all|range|flush|restore]-latency-avg: 平均执行时间（ns）</span><br><span class="line">[put|put-if-absent|get|delete|put-all|all|range|flush|restore]-rate: 每秒的平均运行速度</span><br><span class="line"></span><br><span class="line">#### others</span><br><span class="line">GC、CPU、IO等</span><br><span class="line"></span><br><span class="line">### Monitoring实现</span><br><span class="line">#### 方式一：</span><br><span class="line">1.提供Web服务支持，执行监听器注册我们需要监控的指标，可按Json格式输出</span><br><span class="line">2.启动后台进程定期通过Http请求抓取指标，并上报数据到redis队列</span><br><span class="line">3.storm消费数据进行分析计算</span><br></pre></td></tr></table></figure>
+&lt;/servlet-mapping&gt;</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[源码地址](https:&#x2F;&#x2F;github.com&#x2F;dropwizard&#x2F;metrics)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### Kafka性能指标</span><br><span class="line">#### kafka.server</span><br><span class="line">BrokerTopicMetrics,name&#x3D;MessagesInPerSec: 每秒消息量</span><br><span class="line">BrokerTopicMetrics,name&#x3D;BytesInPerSec: 每秒输入字节数</span><br><span class="line">BrokerTopicMetrics,name&#x3D;BytesOutPerSec: 每秒输出字节数</span><br><span class="line">ReplicaManager,name&#x3D;UnderReplicatedPartitions: 复制分区的数量，默认0，|ISR|&lt;|all replicas|</span><br><span class="line">ReplicaManager,name&#x3D;PartitionCount: 分区数</span><br><span class="line">ReplicaManager,name&#x3D;LeaderCount: Leader副本数</span><br><span class="line">ReplicaManager,name&#x3D;IsrShrinksPerSec: ISR回退</span><br><span class="line">ReplicaManager,name&#x3D;IsrExpandsPerSec: ISR超前 value is 0</span><br><span class="line">ReplicaFetcherManager,name&#x3D;MaxLag,clientId&#x3D;Replica: 滞后follower和leader的最大消息长度</span><br><span class="line">FetcherLagMetrics,name&#x3D;ConsumerLag,clientId&#x3D;([-.\w]+),topic&#x3D;([-.\w]+),partition&#x3D;([0-9]+): 滞后follower的消息长度</span><br><span class="line">DelayedOperationPurgatory,name&#x3D;PurgatorySize,delayedOperation&#x3D;Produce: producer等待请求大小</span><br><span class="line">DelayedOperationPurgatory,name&#x3D;PurgatorySize,delayedOperation&#x3D;Fetch: 获取等待请求大小</span><br><span class="line">KafkaRequestHandlerPool,name&#x3D;RequestHandlerAvgIdlePercent: 平均处理线程空闲时间</span><br><span class="line"></span><br><span class="line">#### kafka.network</span><br><span class="line">kafka.network:type&#x3D;RequestMetrics,name&#x3D;$1,request&#x3D;&#123;Produce|FetchConsumer|FetchFollower&#125;</span><br><span class="line">RequestsPerSec: 每秒请求量</span><br><span class="line">TotalTimeMs: 请求总时间</span><br><span class="line">RequestQueueTimeMs: 请求队列等待时间</span><br><span class="line">LocalTimeMs: 请求leader处理时间</span><br><span class="line">RemoteTimeMs: 请求follower等待时间</span><br><span class="line">ResponseQueueTimeMs: 请求队列等待响应时间</span><br><span class="line">ResponseSendTimeMs: 请求响应发送时间</span><br><span class="line">kafka.network:type&#x3D;SocketServer,name&#x3D;NetworkProcessorAvgIdlePercent: 平均网络处理空闲时间</span><br><span class="line">    </span><br><span class="line">#### kafka.controller</span><br><span class="line">KafkaController,name&#x3D;ActiveControllerCount: 活跃broker数量</span><br><span class="line">ControllerStats,name&#x3D;LeaderElectionRateAndTimeMs: leader选举率</span><br><span class="line">ControllerStats,name&#x3D;UncleanLeaderElectionsPerSec: Unclean leader选举率</span><br><span class="line"></span><br><span class="line">#### common</span><br><span class="line">connection-close-rate: 每秒连接关闭率</span><br><span class="line">connection-creation-rate: 每秒新建连接率</span><br><span class="line">network-io-rate: 平均每秒IO次数（读取或写入）</span><br><span class="line">outgoing-byte-rat: 平均每秒向服务器发送的字节数</span><br><span class="line">request-rate: 平均每秒发送的请求数</span><br><span class="line">incoming-byte-rate: 每秒读取字节数</span><br><span class="line">response-rate: 每秒收到的回复</span><br><span class="line">select-rate: IO切换次数</span><br><span class="line">io-wait-ratio: IO线程等待时间</span><br><span class="line">connection-count: 当前活跃连接数</span><br><span class="line">    </span><br><span class="line">#### broker</span><br><span class="line">outgoing-byte-rate: 平均每秒发送字节数</span><br><span class="line">request-rate: 平均每秒请求数</span><br><span class="line">request-size-avg: 所有请求的平均大小</span><br><span class="line">request-latency-avg: 平均请求时间(ms)</span><br><span class="line">response-rate: 每秒收到的响应数</span><br><span class="line">    </span><br><span class="line">#### producer</span><br><span class="line">waiting-threads: 缓存区排队的用户阻塞线程数</span><br><span class="line">buffer-available-bytes: 可用内存字节数</span><br><span class="line">batch-size-avg: 每个分区每次请求发送的平均字节数</span><br><span class="line">compression-rate-avg: 批量记录平均压缩率</span><br><span class="line">record-queue-time-avg: 批量记录耗费的平均时间（ms）</span><br><span class="line">request-latency-avg: 平均请求时间（ms）</span><br><span class="line">record-send-rate: 每秒发送的平均次数</span><br><span class="line">record-retry-rate: 每秒重试发送次数</span><br><span class="line">record-error-rate: 每秒错误数量次数</span><br><span class="line">requests-in-flight: 目前等待响应的请求数量</span><br><span class="line">metadata-age: 当前生产者数据使用周期（s）</span><br><span class="line">    </span><br><span class="line">#### consumer</span><br><span class="line">##### Consumer Group</span><br><span class="line">commit-latency-avg: 提交请求所用的平均时间</span><br><span class="line">commit-rate: 每秒提交调用次数</span><br><span class="line">assigned-partitions: 当前分配给该消费者的分区数（可选）</span><br><span class="line">heartbeat-rate: 平均每秒心跳数</span><br><span class="line">join-time-avg: 群组重新加入的平均时间</span><br><span class="line">join-rate: 每秒连接组的数量</span><br><span class="line">sync-time-avg: 群组同步所需的平均时间</span><br><span class="line">sync-rate: 每秒同步的组数</span><br><span class="line">    </span><br><span class="line">##### consumer fetch</span><br><span class="line">fetch-size-avg: 每次请求获取的平均字节数</span><br><span class="line">bytes-consumed-rate: 每秒消耗的平均字节数</span><br><span class="line">fetch-latency-avg: 请求所用的平均时间</span><br><span class="line">fetch-rate: 每秒提取请求数</span><br><span class="line">records-lag-max: 分区中记录的最大滞后数量</span><br><span class="line">    </span><br><span class="line">##### topic-level fetch</span><br><span class="line">fetch-size-avg: topic请求的平均字节数</span><br><span class="line">bytes-consumed-rate: topic每秒平均消耗的字节数</span><br><span class="line"></span><br><span class="line">#### streams</span><br><span class="line">##### Thread</span><br><span class="line">[commit|poll|process|punctuate]-latency-avg: 平均执行时间（ms）</span><br><span class="line">[commit|poll|process|punctuate]-rate: 平均每秒请求数</span><br><span class="line">task-created-rate: 每秒新建任务数</span><br><span class="line">task-closed-rate: 每秒关闭任务数</span><br><span class="line">skipped-records-rate: 每秒跳过记录数</span><br><span class="line">    </span><br><span class="line">##### Task</span><br><span class="line">commit-latency-avg: 平均执行时间（ms）</span><br><span class="line">commit-rate: 每秒提交的平均次数</span><br><span class="line"></span><br><span class="line">##### Processor Node</span><br><span class="line">forward-rate: 每秒从源节点向下游转发的平均速率</span><br><span class="line"></span><br><span class="line">##### State Store </span><br><span class="line">[put|put-if-absent|get|delete|put-all|all|range|flush|restore]-latency-avg: 平均执行时间（ns）</span><br><span class="line">[put|put-if-absent|get|delete|put-all|all|range|flush|restore]-rate: 每秒的平均运行速度</span><br><span class="line"></span><br><span class="line">#### others</span><br><span class="line">GC、CPU、IO等</span><br><span class="line"></span><br><span class="line">### Monitoring实现</span><br><span class="line">#### 方式一：</span><br><span class="line">1.提供Web服务支持，执行监听器注册我们需要监控的指标，可按Json格式输出</span><br><span class="line">2.启动后台进程定期通过Http请求抓取指标，并上报数据到redis队列</span><br><span class="line">3.storm消费数据进行分析计算</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>需多依赖<br><dependency><br>    <groupId>io.dropwizard.metrics</groupId><br>    <artifactId>metrics-servlets</artifactId><br>    <version>3.1.0</version><br></dependency></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### 方式二：</span><br><span class="line">1.重写KafkaReporter继承ScheduledReporter，构造相应指标，格式化、序列化Json，通过metrics收集统计结果</span><br><span class="line">2.创建kafkaProducer将构造的结果数据按不同Topic分类发送给kafka</span><br><span class="line">3.storm消费对应kafka数据，再进行分析计算</span><br><span class="line"></span><br><span class="line">Pom依赖：</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### 方式二：</span><br><span class="line">1.重写KafkaReporter继承ScheduledReporter，构造相应指标，格式化、序列化Json，通过metrics收集统计结果</span><br><span class="line">2.创建kafkaProducer将构造的结果数据按不同Topic分类发送给kafka</span><br><span class="line">3.storm消费对应kafka数据，再进行分析计算</span><br><span class="line"></span><br><span class="line">Pom依赖：</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <dependency>
     <groupId>org.apache.kafka</groupId>
     <artifactId>kafka_2.11</artifactId>
@@ -331,175 +255,13 @@ protected HealthCheckRegistry getHealthCheckRegistry() {
 ```
 
 <h3 id="Kafka监控工具"><a href="#Kafka监控工具" class="headerlink" title="Kafka监控工具"></a>Kafka监控工具</h3><h4 id="KafkaOffsetMonitor"><a href="#KafkaOffsetMonitor" class="headerlink" title="KafkaOffsetMonitor"></a>KafkaOffsetMonitor</h4><blockquote>
-<p>是由Kafka开源社区提供的一款Web管理界面，配置操作简单，界面简单，但不能自动刷新，但功能覆盖不全<br>可以对consumer消费情况进行监控，并能列出每个consumer的offset数据<br>可以查看每个topic的partition的列表（topic，pid，offset，logsize，lag，owner等）<br>可以查看每个consumser group列表信息<br>可以查看topic的历史消费信息<br><a href="https://github.com/quantifind/KafkaOffsetMonitor" target="_blank" rel="noopener">源码地址</a></p>
+<p>是由Kafka开源社区提供的一款Web管理界面，配置操作简单，界面简单，但不能自动刷新，但功能覆盖不全<br>可以对consumer消费情况进行监控，并能列出每个consumer的offset数据<br>可以查看每个topic的partition的列表（topic，pid，offset，logsize，lag，owner等）<br>可以查看每个consumser group列表信息<br>可以查看topic的历史消费信息<br><a target="_blank" rel="noopener" href="https://github.com/quantifind/KafkaOffsetMonitor">源码地址</a></p>
 </blockquote>
 <h4 id="kafka-web-console"><a href="#kafka-web-console" class="headerlink" title="kafka-web-console"></a>kafka-web-console</h4><blockquote>
-<p>也是kafka开源的web监控程序，Scala编写，编译搭建相对于前者更复杂，默认用的数据库是H2，但可自动刷新。<br>可以查看brokers kafka集群信息<br>可以查看每个topic的Partition，logsize，分区leader等信息<br>可以查看consumer group的partition，offset，lag，owner等信息；topic feed最新发布消息<br>可以查看consumer偏移和滞后情况，历史消息以及consumer/producer消息吞吐量历史的图表<br>控制台还提供了RAML中描述的JSON API<br><a href="https://github.com/claudemamo/kafka-web-console" target="_blank" rel="noopener">源码地址</a></p>
+<p>也是kafka开源的web监控程序，Scala编写，编译搭建相对于前者更复杂，默认用的数据库是H2，但可自动刷新。<br>可以查看brokers kafka集群信息<br>可以查看每个topic的Partition，logsize，分区leader等信息<br>可以查看consumer group的partition，offset，lag，owner等信息；topic feed最新发布消息<br>可以查看consumer偏移和滞后情况，历史消息以及consumer/producer消息吞吐量历史的图表<br>控制台还提供了RAML中描述的JSON API<br><a target="_blank" rel="noopener" href="https://github.com/claudemamo/kafka-web-console">源码地址</a></p>
 </blockquote>
 <h4 id="kafka-manger"><a href="#kafka-manger" class="headerlink" title="kafka-manger"></a>kafka-manger</h4><blockquote>
-<p>是由yahoo构建一款基于web的kafka管理器，可以管理多个kafka集群，且容易检测集群（topics,brokers,备份,分区）分布不均的情况<br>可以选择你要运行的副本<br>可以基于当前分区状况重新分配生成分区<br>可以选择topic配置并创建topic(0.8.1.1和0.8.2+的配置不同)<br>可以删除topic(只支持0.8.2+的版本并且要在broker配置中设置delete.topic.enable=true)，Topic list会指明哪些topic被删除<br>可以为已存在的topic增加分区，更新配置<br>可以支持多个topic批量重分区，选择partition broker位置等<br>可以启用JMX轮询代理，以及broker、metrics主题等级<br>可选地筛选出zookeeper中没有ids/owner/＆offset/目录的消费者<br><a href="https://github.com/yahoo/kafka-manager" target="_blank" rel="noopener">源码地址</a></p>
+<p>是由yahoo构建一款基于web的kafka管理器，可以管理多个kafka集群，且容易检测集群（topics,brokers,备份,分区）分布不均的情况<br>可以选择你要运行的副本<br>可以基于当前分区状况重新分配生成分区<br>可以选择topic配置并创建topic(0.8.1.1和0.8.2+的配置不同)<br>可以删除topic(只支持0.8.2+的版本并且要在broker配置中设置delete.topic.enable=true)，Topic list会指明哪些topic被删除<br>可以为已存在的topic增加分区，更新配置<br>可以支持多个topic批量重分区，选择partition broker位置等<br>可以启用JMX轮询代理，以及broker、metrics主题等级<br>可选地筛选出zookeeper中没有ids/owner/＆offset/目录的消费者<br><a target="_blank" rel="noopener" href="https://github.com/yahoo/kafka-manager">源码地址</a></p>
 </blockquote>
 <h2 id="QA"><a href="#QA" class="headerlink" title="QA"></a>QA</h2><p><strong>欢迎大家共同讨论、分享</strong></p>
-
-    </div>
-
-    
-    
-    
-
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE-kafka/" rel="tag"># 大数据 kafka</a>
-          </div>
-
-        
-
-      </footer>
-    
-  </article>
-  
-  
-  
-
-  </div>
-
-
-          </div>
-          
-
-        </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          Table of Contents
-        </li>
-        <li class="sidebar-nav-overview">
-          Overview
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka-metrics"><span class="nav-number">2.</span> <span class="nav-text">Kafka metrics</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#metrics收集"><span class="nav-number">2.1.</span> <span class="nav-text">metrics收集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注册"><span class="nav-number">2.1.1.</span> <span class="nav-text">注册</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Gauges"><span class="nav-number">2.1.2.</span> <span class="nav-text">Gauges</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Counters"><span class="nav-number">2.1.3.</span> <span class="nav-text">Counters</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Histograms"><span class="nav-number">2.1.4.</span> <span class="nav-text">Histograms</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Timers"><span class="nav-number">2.1.5.</span> <span class="nav-text">Timers</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Health-Checks"><span class="nav-number">2.1.6.</span> <span class="nav-text">Health Checks</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Metrics-Annotation"><span class="nav-number">2.1.7.</span> <span class="nav-text">Metrics Annotation</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kafka监控工具"><span class="nav-number">2.2.</span> <span class="nav-text">Kafka监控工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#KafkaOffsetMonitor"><span class="nav-number">2.2.1.</span> <span class="nav-text">KafkaOffsetMonitor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#kafka-web-console"><span class="nav-number">2.2.2.</span> <span class="nav-text">kafka-web-console</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#kafka-manger"><span class="nav-number">2.2.3.</span> <span class="nav-text">kafka-manger</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QA"><span class="nav-number">3.</span> <span class="nav-text">QA</span></a></li></ol></div>
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <img class="site-author-image" itemprop="image" alt="zhijunwoo"
-    src="/images/avatar.gif">
-  <p class="site-author-name" itemprop="name">zhijunwoo</p>
-  <div class="site-description" itemprop="description">技术分享，洞悉数据，高效监控，分布式计算，架构优化，共创价值</div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">1</span>
-          <span class="site-state-item-name">posts</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">categories</span>
-      </div>
-      <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">tags</span>
-      </div>
-  </nav>
-</div>
-
-
-
-      </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-<div class="copyright">
-  
-  &copy; 
-  <span itemprop="copyrightYear">2019</span>
-  <span class="with-love">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">zhijunwoo</span>
-</div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
-  </div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.5.0
-  </div>
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-  </div>
-
-  
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
-<script src="/js/schemes/muse.js"></script>
-<script src="/js/next-boot.js"></script>
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-</body>
-</html>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">zhijunwoo</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://yoursite.com/2019/06/02/kafka_metrics/">http://yoursite.com/2019/06/02/kafka_metrics/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE-kafka/">大数据 kafka</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"></nav></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="/null" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">zhijunwoo</div><div class="author-info__description">技术分享，洞悉数据，高效监控，分布式计算，架构优化，共创价值</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">1</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%91%98%E8%A6%81"><span class="toc-number">1.</span> <span class="toc-text">摘要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kafka-metrics"><span class="toc-number">2.</span> <span class="toc-text">Kafka metrics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#metrics%E6%94%B6%E9%9B%86"><span class="toc-number">2.1.</span> <span class="toc-text">metrics收集</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E5%86%8C"><span class="toc-number">2.1.1.</span> <span class="toc-text">注册</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Gauges"><span class="toc-number">2.1.2.</span> <span class="toc-text">Gauges</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Counters"><span class="toc-number">2.1.3.</span> <span class="toc-text">Counters</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Histograms"><span class="toc-number">2.1.4.</span> <span class="toc-text">Histograms</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Timers"><span class="toc-number">2.1.5.</span> <span class="toc-text">Timers</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Health-Checks"><span class="toc-number">2.1.6.</span> <span class="toc-text">Health Checks</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Metrics-Annotation"><span class="toc-number">2.1.7.</span> <span class="toc-text">Metrics Annotation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kafka%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7"><span class="toc-number">2.2.</span> <span class="toc-text">Kafka监控工具</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#KafkaOffsetMonitor"><span class="toc-number">2.2.1.</span> <span class="toc-text">KafkaOffsetMonitor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kafka-web-console"><span class="toc-number">2.2.2.</span> <span class="toc-text">kafka-web-console</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kafka-manger"><span class="toc-number">2.2.3.</span> <span class="toc-text">kafka-manger</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#QA"><span class="toc-number">3.</span> <span class="toc-text">QA</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2019/06/02/kafka_metrics/" title="洞悉 Kafka metrics"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="洞悉 Kafka metrics"/></a><div class="content"><a class="title" href="/2019/06/02/kafka_metrics/" title="洞悉 Kafka metrics">洞悉 Kafka metrics</a><time datetime="2019-06-02T15:12:10.555Z" title="Created 2019-06-02 23:12:10">2019-06-02</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 By zhijunwoo</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><div class="js-pjax"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>
