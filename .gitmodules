@@ -1,7 +1,7 @@
 [submodule "themes/next"]
 	path = themes/next
-	url = https://github.com/woozhijun/hexo-theme-next.git
-	branch = release-v7.8.0
+	url = https://github.com/next-theme/hexo-theme-next.git
+	tag = v8.1.0
 [submodule "themes/matery"]
 	path = themes/matery
 	url = https://github.com/blinkfox/hexo-theme-matery.git

@@ -6,13 +6,15 @@
 title: zhijunwoo
 subtitle: 技术分享、洞悉数据、同创价值
 description: 技术分享，洞悉数据，高效监控，分布式计算，架构优化，共创价值
+keywords: zhijunwoo,大数据,监控,架构
 author: zhijunwoo
-language: zh-Hans
-timezone:
+language:
+  - zh-CN
+timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: http://zhijunwoo.com
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -28,13 +30,13 @@ i18n_dir: :lang
 skip_render:
 
 # Writing
-new_post_name: :title.md # File name of new posts
+new_post_name: :year:month:day-:title.md # File name of new posts
 default_layout: post
 titlecase: false # Transform title into titlecase
 #external_link: true # Open external links in new tab
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true
 relative_link: false
 future: true
 highlight:
@@ -42,11 +44,22 @@ highlight:
   line_number: true
   auto_detect: false
   tab_replace:
+  wrap: true
+  hljs: false
+prismjs:
+  enable: false
+  preprocess: true
+  line_number: true
+  tab_replace:
 
 # Category & Tag
 default_category: uncategorized
 category_map:
+  大数据: bigdata
+  监控: monitor
 tag_map:
+  消息队列: kafka
+  流式计算: flink
 
 # Date / Time format
 ## Hexo uses Moment.js to parse and display date
@@ -54,6 +67,7 @@ tag_map:
 ## http://momentjs.com/docs/#/displaying/format/
 date_format: YYYY-MM-DD
 time_format: HH:mm:ss
+updated_option: mtime
 
 # Pagination
 ## Set per_page to 0 to disable pagination
@@ -63,7 +77,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: butterfly
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
@@ -71,3 +85,9 @@ deploy:
   type: git
   repo: https://github.com/woozhijun/woozhijun.github.io.git
   branch: master
+
+search:
+  path: search.xml
+  field: post
+  content: true
+  format: html
