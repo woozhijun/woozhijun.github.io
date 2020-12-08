@@ -53,7 +53,7 @@ favicon:
   small: /images/favicon-16x16-next.png
   medium: /images/favicon-32x32-next.png
   apple_touch_icon: /images/apple-touch-icon-next.png
-  safari_pinned_tab: /images/logo.svg
+  safari_pinned_tab: /images/monitor_icon.svg
   android_manifest: /manifest.json
 
 # Custom Logo (Warning: Do not support scheme Mist)
@@ -124,7 +124,7 @@ sidebar:
 # Sidebar Avatar
 avatar:
   # Replace the default image and set the url here.
-  url: /images/avatar.gif
+  url: /images/monitor_logo.jpg
   # If true, the avatar will be dispalyed in circle.
   rounded: true
   # If true, the avatar will be rotated with the cursor.
@@ -140,7 +140,7 @@ site_state: true
 social:
   GitHub: https://github.com/woozhijun || fab fa-github
   #E-Mail: mailto:yourname@gmail.com || fa fa-envelope
-  Weibo: https://weibo.com/zhijunwoo || fab fa-weibo
+  Weibo: https://weibo.com/wuzj008 || fab fa-weibo
   #Google: https://plus.google.com/yourname || fab fa-google
   #Twitter: https://twitter.com/yourname || fab fa-twitter
   #FB Page: https://www.facebook.com/yourname || fab fa-facebook
@@ -148,6 +148,7 @@ social:
   #YouTube: https://youtube.com/yourname || fab fa-youtube
   #Instagram: https://instagram.com/yourname || fab fa-instagram
   #Skype: skype:yourname?call|chat || fab fa-skype
+  Zhihu: https://www.zhihu.com/people/zhijunwoo || fab fa-zhihu
 
 social_icons:
   enable: true
