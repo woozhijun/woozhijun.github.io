@@ -91,3 +91,9 @@ search:
   field: post
   content: true
   format: html
+
+symbols_count_time:
+  symbols: true
+  time: true
+  total_symbols: true
+  total_time: true

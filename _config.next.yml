@@ -86,8 +86,7 @@ menu:
   标签: /tags/ || fa fa-tags
   时间轴: /archives/ || fa fa-archive
   日程表: /schedule/ || fa fa-calendar
-  #sitemap: /sitemap.xml || fa fa-sitemap
-  commonweal: /404/ || fa fa-heartbeat
+  sitemap: /sitemap.xml || fa fa-sitemap
 
 # Enable / Disable menu icons / item badges.
 menu_settings:
@@ -205,7 +204,7 @@ footer:
     # Icon name in Font Awesome. See: https://fontawesome.com/icons
     name: fa fa-heart
     # If you want to animate the icon, set it to true.
-    animated: false
+    animated: true
     # Change the color of icon, using Hex Code.
     color: "#ff0000"
 
@@ -217,12 +216,12 @@ footer:
 
   # Beian ICP and gongan information for Chinese users. See: https://beian.miit.gov.cn, http://www.beian.gov.cn
   beian:
-    enable: true
+    enable: false
     icp:
     # The digit in the num of gongan beian.
     gongan_id:
     # The full num of gongan beian.
-    gongan_num: 474097500
+    gongan_num: 
     # The icon for gongan beian. See: http://www.beian.gov.cn/portal/download
     gongan_icon_url:
 
@@ -252,9 +251,7 @@ post_meta:
 # Dependencies: https://github.com/next-theme/hexo-word-counter
 symbols_count_time:
   separated_meta: true
-  item_text_total: false
-  total_symbols: true
-  total_time: true
+  item_text_total: true
 
 # Use icon instead of the symbol # to indicate the tag at the bottom of the post
 tag_icon: true
@@ -263,13 +260,13 @@ tag_icon: true
 # Front-matter variable (unsupport animation).
 reward_settings:
   # If true, a donate button will be displayed in every article by default.
-  enable: false
+  enable: true
   animation: false
   #comment: Buy me a coffee
 
 reward:
-  #wechatpay: /images/wechatpay.png
-  #alipay: /images/alipay.png
+  wechatpay: /images/wechatpay.png
+  alipay: /images/alipay.png
   #paypal: /images/paypal.png
   #bitcoin: /images/bitcoin.png
 
@@ -303,7 +300,7 @@ post_edit:
 
 # Show previous post and next post in post footer if exists
 # Available values: left | right | false
-post_navigation: left
+post_navigation: right
 
 
 # ---------------------------------------------------------------
@@ -426,7 +423,7 @@ font:
   # Global font settings used for all elements inside <body>.
   global:
     external: true
-    family: Noto Serif SC
+    family: 
     size:
 
   # Font settings for site title (.site-title).
@@ -439,13 +436,13 @@ font:
   # Font settings for headlines (<h1> to <h6>).
   headings:
     external: true
-    family: Lato
+    family: 
     size:
 
   # Font settings for posts (.post-body).
   posts:
     external: true
-    family: Merriweather
+    family: 
 
   # Font settings for <code> and code blocks.
   codes:
