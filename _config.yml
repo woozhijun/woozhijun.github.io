@@ -55,11 +55,13 @@ prismjs:
 # Category & Tag
 default_category: uncategorized
 category_map:
-  大数据: bigdata
-  监控: monitor
+  金融: bigdata
+  架构: arch
 tag_map:
   消息队列: kafka
-  流式计算: flink
+  流计算: flink
+  大数据: bigdata
+  监控: monitor
 
 # Date / Time format
 ## Hexo uses Moment.js to parse and display date

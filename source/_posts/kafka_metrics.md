@@ -2,6 +2,7 @@
 title: 洞悉 Kafka metrics
 tags: 大数据 kafka
 category: kafka
+comments: true
 ---
 
 ## 摘要
