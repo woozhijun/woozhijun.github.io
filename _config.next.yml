@@ -42,7 +42,7 @@ scheme: Mist
 #scheme: Gemini
 
 # Dark Mode
-darkmode: false
+darkmode: true
 
 
 # ---------------------------------------------------------------
@@ -114,7 +114,7 @@ sidebar:
   #  - always  expand for all pages automatically.
   #  - hide    expand only when click on the sidebar toggle icon.
   #  - remove  totally remove sidebar including sidebar toggle.
-  display: post
+  display: hide
 
   # Sidebar padding in pixels.
   padding: 18
@@ -263,11 +263,11 @@ reward_settings:
   # If true, a donate button will be displayed in every article by default.
   enable: true
   animation: false
-  #comment: Buy me a coffee
+  #comment: 原创技术分享, 您的支持将Woo动力全开!
 
 reward:
   wechatpay: /images/wechatpay.png
-  alipay: /images/alipay.png
+  #alipay: /images/alipay.png
   #paypal: /images/paypal.png
   #bitcoin: /images/bitcoin.png
 
@@ -276,7 +276,7 @@ reward:
 follow_me:
   #Twitter: https://twitter.com/username || fab fa-twitter
   #Telegram: https://t.me/channel_name || fab fa-telegram
-  WeChat: /images/wechat_channel.jpg || fab fa-weixin
+  WeChat: /images/sousou_gzh.png || fab fa-weixin
   #RSS: /atom.xml || fa fa-rss
 
 # Related popular posts
@@ -386,7 +386,7 @@ reading_progress:
 bookmark:
   enable: true
   # Customize the color of the bookmark.
-  color: "#222"
+  color: "#5de5f4"
   # If auto, save the reading progress when closing the page or clicking the bookmark-icon.
   # If manual, only save it by clicking the bookmark-icon.
   save: auto
@@ -483,7 +483,7 @@ yandex_site_verification:
 baidu_site_verification:
 
 # Enable baidu push so that the blog will push the url to baidu automatically which is very helpful for SEO.
-baidu_push: false
+baidu_push: true
 
 
 # ---------------------------------------------------------------

@@ -6,7 +6,7 @@
 title: zhijunwoo
 subtitle: 技术分享、洞悉数据、同创价值
 description: 技术分享，洞悉数据，高效监控，分布式计算，架构优化，共创价值
-keywords: zhijunwoo,大数据,监控,架构
+keywords: zhijunwoo,大数据,流计算,监控,架构,java
 author: zhijunwoo
 language:
   - zh-CN
@@ -23,11 +23,16 @@ permalink_defaults:
 source_dir: source
 public_dir: public
 tag_dir: tags
-archive_dir: archives
+archive_dir: /
 category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
 skip_render:
+
+index_generator:
+  path: archives
+  per_page: 15
+  order_by: -date
 
 # Writing
 new_post_name: :year:month:day-:title.md # File name of new posts
@@ -55,13 +60,23 @@ prismjs:
 # Category & Tag
 default_category: uncategorized
 category_map:
-  金融: bigdata
-  架构: arch
+  基础概述: overview
+  数据结构: structure
+  大数据: bigdata
+  监控: monitor
+  随笔: essay
 tag_map:
-  消息队列: kafka
+  Java: java
+  Springboot: springboot
+  Golang: golang
+  Python: python
+  Kafka: kafka
+  Clickchouse: clickhouse
   流计算: flink
   大数据: bigdata
   监控: monitor
+  时序数据库: tsm
+  多线程: thread
 
 # Date / Time format
 ## Hexo uses Moment.js to parse and display date
