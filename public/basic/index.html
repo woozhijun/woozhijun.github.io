@@ -6,7 +6,8 @@
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 5.2.0">
 
-
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
@@ -22,21 +23,23 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"zhijunwoo.com","root":"/","images":"/images","scheme":"Mist","version":"8.1.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#5de5f4","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":true,"nav":null,"activeClass":"utterances"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+    var CONFIG = {"hostname":"zhijunwoo.com","root":"/","images":"/images","scheme":"Mist","version":"8.1.0","exturl":false,"sidebar":{"position":"right","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":true,"nav":null,"activeClass":"utterances"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 <meta name="description" content="技术分享，洞悉数据，高效监控，分布式计算，架构优化，共创价值">
 <meta property="og:type" content="website">
-<meta property="og:title" content="zhijunwoo">
-<meta property="og:url" content="http://zhijunwoo.com/categories/kafka/index.html">
+<meta property="og:title" content="basic">
+<meta property="og:url" content="http://zhijunwoo.com/basic/index.html">
 <meta property="og:site_name" content="zhijunwoo">
 <meta property="og:description" content="技术分享，洞悉数据，高效监控，分布式计算，架构优化，共创价值">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-11T16:55:20.000Z">
+<meta property="article:modified_time" content="2021-01-11T17:05:43.306Z">
 <meta property="article:author" content="zhijunwoo">
 <meta property="article:tag" content="zhijunwoo,大数据,流计算,监控,架构,java">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://zhijunwoo.com/categories/kafka/">
+<link rel="canonical" href="http://zhijunwoo.com/basic/">
 
 
 <script data-pjax class="page-configurations">
@@ -48,7 +51,8 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>分类: kafka | zhijunwoo</title>
+<title>basic | zhijunwoo
+</title>
   
     <script>
       function sendPageView() {
@@ -170,19 +174,19 @@
     <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
-        <li class="menu-item menu-item-时间轴">
+        <li class="menu-item menu-item-基础">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>时间轴</a>
-
-  </li>
-        <li class="menu-item menu-item-日程表">
-
-    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+    <a href="/basic/" rel="section"><i class="fa fa-book fa-fw"></i>基础</a>
 
   </li>
-        <li class="menu-item menu-item-sitemap">
+        <li class="menu-item menu-item-大数据">
 
-    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+    <a href="/bigdata/" rel="section"><i class="fa fa-server fa-fw"></i>大数据</a>
+
+  </li>
+        <li class="menu-item menu-item-随笔">
+
+    <a href="/essay/" rel="section"><i class="fa fa-coffee fa-fw"></i>随笔</a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -260,7 +264,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -281,10 +285,6 @@
 
         </section>
       </div>
-        <div class="back-to-top animated">
-          <i class="fa fa-arrow-up"></i>
-          <span>0%</span>
-        </div>
     </div>
   </aside>
   <div class="sidebar-dimmer"></div>
@@ -293,6 +293,10 @@
     </header>
 
     
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
   <div class="reading-progress-bar"></div>
   <a role="button" class="book-mark-link book-mark-link-fixed"></a>
 
@@ -303,50 +307,37 @@
 </noscript>
 
 
-    <div class="main-inner category posts-collapse">
+    <div class="main-inner page posts-expand">
+  
+  
 
 
-  
-  
-  
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h2 class="collection-header">kafka
-          <small>分类</small>
-        </h2>
-      </div>
+    
+    
+    
+    <div class="post-block" lang="zh-CN"><header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">basic
+</h1>
+
+<div class="post-meta-container">
+</div>
+
+</header>
 
       
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2020-12-17T18:26:42+08:00"
-              content="2020-12-17">
-          12-17
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/12/17/kafka-metrics/" itemprop="url">
-            <span itemprop="name">洞悉 Kafka metrics</span>
-          </a>
-      </div>
-
       
-    </header>
-  </article>
-
+      <div class="post-body">
+          
+      </div>
+      
+      
+      
     </div>
-  </div>
-  
-  
-  
+
+    
+    
+
 
 
 <script>
@@ -461,6 +452,19 @@ document.addEventListener('pjax:success', () => {
 
 
 
+<script data-pjax>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.8.3/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
 
 
   

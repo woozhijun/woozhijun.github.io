@@ -2,8 +2,9 @@
 <search>
   <entry>
     <title>洞悉 Kafka metrics</title>
-    <url>/2020/12/17/kafka-metrics/</url>
-    <content><![CDATA[<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><blockquote>
+    <url>/2021/01/12/kafka-metrics/</url>
+    <content><![CDATA[<a id="more"></a>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><blockquote>
 <p>本次主要介绍关键的Kafka性能指标，Kafka metrics不同收集方式及数据上报的实现，最后确保达到有效监控Kafka工作状态的目的.</p>
 </blockquote>
 <h2 id="Kafka-metrics"><a href="#Kafka-metrics" class="headerlink" title="Kafka metrics"></a>Kafka metrics</h2><p>Kafka使用Yammer Metrics来上报服务端和客户端的Metric信息，通过配置采集相应数据上报监控系统，展示可视化结果。<br>Yammer Metrics提供6种形式的Metrics收集 —— Gauges，Counters，Histograms，Timers，Health Checks，Metrics Annotation。<br>Yammer Metrics将Metrics收集与上报分离，可以根据需要自由组合。目前支持的Reporter有Console Reporter，JMX Reporter，CSV Reporter，SLF4J Reporter，HTTP Reporter，Ganglia Reporter，Graphite Reporter。<br>因此，Kafka将可以通过以上组合输出我们想要的Metrics数据。</p>
@@ -125,10 +126,11 @@ protected HealthCheckRegistry getHealthCheckRegistry() &#123;
 <h2 id="QA"><a href="#QA" class="headerlink" title="QA"></a>QA</h2><p><strong>欢迎大家共同讨论、分享</strong></p>
 ]]></content>
       <categories>
-        <category>kafka</category>
+        <category>监控</category>
       </categories>
       <tags>
-        <tag>大数据 kafka</tag>
+        <tag>大数据</tag>
+        <tag>kafka</tag>
       </tags>
   </entry>
 </search>

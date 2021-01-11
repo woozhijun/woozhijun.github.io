@@ -2,6 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://zhijunwoo.com/essay/index.html</loc>
+    
+    <lastmod>2021-01-11</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://zhijunwoo.com/basic/index.html</loc>
+    
+    <lastmod>2021-01-11</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://zhijunwoo.com/bigdata/index.html</loc>
+    
+    <lastmod>2021-01-11</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://zhijunwoo.com/2021/01/12/kafka-metrics/</loc>
+    
+    <lastmod>2021-01-11</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://zhijunwoo.com/categories/index.html</loc>
     
     <lastmod>2021-01-10</lastmod>
@@ -12,13 +40,6 @@
     <loc>http://zhijunwoo.com/tags/index.html</loc>
     
     <lastmod>2021-01-10</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://zhijunwoo.com/2020/12/17/kafka-metrics/</loc>
-    
-    <lastmod>2020-12-17</lastmod>
     
   </url>
   
@@ -53,7 +74,14 @@
 
   
   <url>
-    <loc>http://zhijunwoo.com/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE-kafka/</loc>
+    <loc>http://zhijunwoo.com/tags/bigdata/</loc>
+    <lastmod>2021-01-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://zhijunwoo.com/tags/kafka/</loc>
     <lastmod>2021-01-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -62,7 +90,7 @@
 
   
   <url>
-    <loc>http://zhijunwoo.com/categories/kafka/</loc>
+    <loc>http://zhijunwoo.com/categories/monitor/</loc>
     <lastmod>2021-01-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

@@ -84,9 +84,12 @@ menu:
   关于我: /about/ || fa fa-user
   分类: /categories/ || fa fa-th
   标签: /tags/ || fa fa-tags
-  时间轴: /archives/ || fa fa-archive
-  日程表: /schedule/ || fa fa-calendar
-  sitemap: /sitemap.xml || fa fa-sitemap
+  #时间轴: /archives/ || fa fa-archive
+  #日程表: /schedule/ || fa fa-calendar
+  #sitemap: /sitemap.xml || fa fa-sitemap
+  基础: /basic/ || fa fa-book
+  大数据: /bigdata/ || fa fa-server
+  随笔: /essay/ || fa fa-coffee
 
 # Enable / Disable menu icons / item badges.
 menu_settings:
@@ -245,7 +248,7 @@ post_meta:
   created_at: true
   updated_at:
     enable: true
-    another_day: true
+    another_day: false
   categories: true
 
 # Post wordcount display settings
@@ -262,7 +265,7 @@ tag_icon: true
 reward_settings:
   # If true, a donate button will be displayed in every article by default.
   enable: true
-  animation: false
+  animation: true
   #comment: 原创技术分享, 您的支持将Woo动力全开!
 
 reward:
@@ -338,7 +341,7 @@ calendar:
 
 # Preconnect CDN for fonts and plugins.
 # For more information: https://www.w3.org/TR/resource-hints/#preconnect
-preconnect: false
+preconnect: true
 
 # Set the text alignment in posts / pages.
 text_align:
@@ -370,7 +373,7 @@ codeblock:
 back2top:
   enable: true
   # Back to top in sidebar.
-  sidebar: true
+  sidebar: false
   # Scroll percent label in b2t button.
   scrollpercent: true
 
@@ -386,7 +389,7 @@ reading_progress:
 bookmark:
   enable: true
   # Customize the color of the bookmark.
-  color: "#5de5f4"
+  color: "#222"
   # If auto, save the reading progress when closing the page or clicking the bookmark-icon.
   # If manual, only save it by clicking the bookmark-icon.
   save: auto
@@ -799,7 +802,7 @@ pdf:
 
 # Mermaid tag
 mermaid:
-  enable: false
+  enable: true
   # Available themes: default | dark | forest | neutral
   theme: forest
 

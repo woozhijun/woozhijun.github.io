@@ -33,6 +33,7 @@ index_generator:
   path: archives
   per_page: 15
   order_by: -date
+  pagination_dir: page
 
 # Writing
 new_post_name: :year:month:day-:title.md # File name of new posts
@@ -60,7 +61,7 @@ prismjs:
 # Category & Tag
 default_category: uncategorized
 category_map:
-  基础概述: overview
+  基础总结: basic
   数据结构: structure
   大数据: bigdata
   监控: monitor

@@ -1,10 +1,13 @@
 ---
 title: 洞悉 Kafka metrics
-tags: 大数据 kafka
-category: kafka
+tags:
+  - 大数据
+  - kafka
+category: 监控
 comments: true
 ---
 
+<!-- more -->
 ## 摘要
 > 本次主要介绍关键的Kafka性能指标，Kafka metrics不同收集方式及数据上报的实现，最后确保达到有效监控Kafka工作状态的目的.
 
