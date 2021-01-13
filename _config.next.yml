@@ -151,6 +151,9 @@ social:
   #YouTube: https://youtube.com/yourname || fab fa-youtube
   #Instagram: https://instagram.com/yourname || fab fa-instagram
   #Skype: skype:yourname?call|chat || fab fa-skype
+  Wechat: https://mp.weixin.qq.com/s/KnQmSzUOsszFF5RsK4rlQw || fab fa-weixin
+  CSDN: https://blog.csdn.net/wuzj886 || fas fa-copyright
+  简书: https://www.jianshu.com/u/a8a59c9107c4 || fas fa-book-reader
   Zhihu: https://www.zhihu.com/people/zhijunwoo || fab fa-zhihu
 
 social_icons:
