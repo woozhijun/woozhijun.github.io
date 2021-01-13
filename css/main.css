@@ -3073,7 +3073,7 @@ hr {
   text-shadow: 1px 1px 0 rgba(0,0,0,0.1);
 }
 .posts-expand.index .post-header {
-  text-align: left;
+  text-align: center;
 }
 @media (max-width: 767px) {
   .posts-expand.index .post-header {
@@ -3210,7 +3210,7 @@ hr {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #81080f;
+  background: #65d5ff;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
