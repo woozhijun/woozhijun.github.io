@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>洞悉 Kafka metrics</title>
-    <url>/2021/01/12/kafka-metrics/</url>
+    <url>/2021/01/13/kafka-metrics/</url>
     <content><![CDATA[<a id="more"></a>
 <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><blockquote>
 <p>本次主要介绍关键的Kafka性能指标，Kafka metrics不同收集方式及数据上报的实现，最后确保达到有效监控Kafka工作状态的目的.</p>
