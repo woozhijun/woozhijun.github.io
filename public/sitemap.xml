@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://zhijunwoo.com/2021/01/13/kafka-metrics/</loc>
+    
+    <lastmod>2021-01-13</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://zhijunwoo.com/monitor/index.html</loc>
+    
+    <lastmod>2021-01-13</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://zhijunwoo.com/schedule/index.html</loc>
     
     <lastmod>2021-01-13</lastmod>
@@ -38,13 +52,6 @@
   
   <url>
     <loc>http://zhijunwoo.com/basic/index.html</loc>
-    
-    <lastmod>2021-01-13</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://zhijunwoo.com/2021/01/13/kafka-metrics/</loc>
     
     <lastmod>2021-01-13</lastmod>
     

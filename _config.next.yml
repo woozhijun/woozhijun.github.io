@@ -81,14 +81,15 @@ creative_commons:
 # External url should start with http:// or https://
 menu:
   首页: / || fa fa-home
-  关于我: /about/ || fa fa-user
-  分类: /categories/ || fa fa-th
+  关于: /about/ || fa fa-user
+  归档: /archives/ || fa fa-archive
+  #分类: /categories/ || fa fa-th
   标签: /tags/ || fa fa-tags
-  #时间轴: /archives/ || fa fa-archive
   #日程表: /schedule/ || fa fa-calendar
   #sitemap: /sitemap.xml || fa fa-sitemap
   基础: /basic/ || fa fa-book
   大数据: /bigdata/ || fa fa-server
+  监控: /monitor/ || fas fa-desktop
   随笔: /essay/ || fa fa-coffee
 
 # Enable / Disable menu icons / item badges.
@@ -251,7 +252,7 @@ post_meta:
   created_at: true
   updated_at:
     enable: true
-    another_day: false
+    another_day: true
   categories: true
 
 # Post wordcount display settings
@@ -709,7 +710,7 @@ firestore:
 # Show Views / Visitors of the website / page with busuanzi.
 # Get more information on http://ibruce.info/2015/04/04/busuanzi/
 busuanzi_count:
-  enable: false
+  enable: true
   total_visitors: true
   total_visitors_icon: fa fa-user
   total_views: true

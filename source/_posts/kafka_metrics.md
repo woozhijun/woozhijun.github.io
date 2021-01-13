@@ -7,9 +7,9 @@ category: 监控
 comments: true
 ---
 
-<!-- more -->
 ## 摘要
 > 本次主要介绍关键的Kafka性能指标，Kafka metrics不同收集方式及数据上报的实现，最后确保达到有效监控Kafka工作状态的目的.
+<!-- more -->
 
 ## Kafka metrics
 Kafka使用Yammer Metrics来上报服务端和客户端的Metric信息，通过配置采集相应数据上报监控系统，展示可视化结果。
